@@ -19,72 +19,71 @@ This library is inspired by the `Try` implementation in Scala.
 ##### Without `Try`
 
 ``` swift
-	enum FileError: ErrorType {
-		case FileNotFound
-		case Unknown
-	}
+enum FileError: ErrorType {
+	case FileNotFound
+	case Unknown
+}
 	
-	func lineCountOfFile(filename: String) throws -> Int {
-		if exists(filename) {
-			let file = open(filename)
-			return file.lineCount
-		}
-		
+func lineCountOfFile(filename: String) throws -> Int {
+	if exists(filename) {
+		let file = open(filename)
+		return file.lineCount
+	} else {
 		throw FileError.FileNotFound
 	}
+}
 	
-	// traditional way with Swift 2.0
-	do {
-		let lineCount = try lineCountOfFile("data.text")
-	} catch {
-		println(error)
-	}
+// traditional way with Swift 2.0
+do {
+	let lineCount = try lineCountOfFile("data.text")
+} catch {
+	println(error)
+}
  
 ```
 
 ##### Code with `Try`
 
 ``` swift
-	let t = Try(try lineCountOfFile("data.text"))
+let t = Try(try lineCountOfFile("data.text"))
 
- 	switch t {
- 		case .Success(let lines): print(lines)
-		case .Failure(let error): print(error)
-	}
+switch t {
+ 	case .Success(let lines): print(lines)
+	case .Failure(let error): print(error)
+}
 ```
 
 - `map` `<^>`
 
 ```swift
-	let t = Try(try lineCountOfFile("data.text")).map { $0 * 5 }
+let t = Try(try lineCountOfFile("data.text")).map { $0 * 5 }
 
- 	switch t {
- 		case .Success(let lines): print(lines)
-		case .Failure(let error): print(error)
-	}
+switch t {
+	case .Success(let lines): print(lines)
+	case .Failure(let error): print(error)
+}
 ```
 
 - `flatMap` `>>-`
 
 ```swift
-	let t = Try(try lineCountOfFile("data.text")).flapMap { Try(try doSomething($0)) }
+let t = Try(try lineCountOfFile("data.text")).flapMap { Try(try doSomething($0)) }
 
- 	switch t {
- 		case .Success(let lines): print(lines)
-		case .Failure(let error): print(error)
-	}
-
+switch t {
+ 	case .Success(let lines): print(lines)
+	case .Failure(let error): print(error)
+}
 ```
 
 - Operators
 
 ``` swift
-	let t = Try(try lineCountOfFile("data.text")) <^> { $0 * 5} >>- { Try(try doSomething($0)) }
+let t = Try(try lineCountOfFile("data.text")) <^> { $0 * 5} >>- { Try(try doSomething($0)) }
 
- 	switch t {
- 		case .Success(let lines): print(lines)
-		case .Failure(let error): print(error)
-	}
+switch t {
+	case .Success(let lines): print(lines)
+	case .Failure(let error): print(error)
+}
 ```
 
 Installation
