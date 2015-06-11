@@ -33,7 +33,7 @@ This library is inspired by the `Try` implementation in Scala.
 		throw FileError.FileNotFound
 	}
 	
-	// traditional way
+	// traditional way with Swift 2.0
 	do {
 		let lineCount = try lineCountOfFile("data.text")
 	} catch {
@@ -106,6 +106,6 @@ Installation
 Requirements
 -----
 
-- Swift 1.2 (Xcode 6.3 or later)
+- Swift 2.0 (Xcode 7.0 or later)
 - iOS 8.0 or later
 
