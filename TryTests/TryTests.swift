@@ -7,29 +7,47 @@
 //
 
 import XCTest
+import Try
 
-class TryTests: XCTestCase {
+enum TestError: ErrorType {
+    case InvalidString(String)
+    case Unknown
+}
+
+func stringToInt(s: String) throws -> Int {
+    if let i = Int(s) {
+        return i
+    } else {
+        throw TestError.InvalidString(s)
+    }
+}
+
+
+final class TryTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        // Put setup code here. This method is called before the invocation of each test method in the class.
     }
     
     override func tearDown() {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
         super.tearDown()
     }
     
-    func testExample() {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-    
-    func testPerformanceExample() {
-        // This is an example of a performance test case.
-        self.measureBlock() {
-            // Put the code you want to measure the time of here.
+    func testSuccessTry() {
+        let t = Try(try stringToInt("1"))
+        switch t {
+            case .Success(let value): print(value) //XCTAssertEqual(value, 1, "Try should return 1")
+            case .Failure: XCTAssertFalse(true, "Try should not be failed")
         }
     }
     
+    func testFailureTry() {
+        let e = TestError.InvalidString("not number")
+        let t = Try<Int>(error: e)
+        
+        switch t {
+            case .Success: XCTAssertFalse(true, "Try should not be succeeded")
+            case .Failure(let error): print(error) //XCTAssertEqual(error, e, "Try should return an error")
+        }
+    }
 }
