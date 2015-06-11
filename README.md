@@ -36,8 +36,9 @@ func lineCountOfFile(filename: String) throws -> Int {
 // traditional way with Swift 2.0
 do {
 	let lineCount = try lineCountOfFile("data.text")
+	// do something
 } catch {
-	println(error)
+	// error handling
 }
  
 ```
