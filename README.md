@@ -42,7 +42,7 @@ This library is inspired by the `Try` implementation in Scala.
  
 ```
 
-##### Code with Try
+##### Code with `Try`
 
 ``` swift
 	let t = Try(try lineCountOfFile("data.text"))
