@@ -93,8 +93,17 @@ public enum Try<T> {
         }
     }
     
-    // TODO:
     // recover
+    // Creates a new Try by applying a function to the error result of this Try.
+    // If this Try is completed with an success then the new Try will also contain this success.
+    // This is like map for the error.
+    public func recover(f: ErrorType -> T) -> Try<T> {
+        switch self {
+        case .Success(let value): return .Success(value)
+        case .Failure(let error): return .Success(f(error))
+        }
+    }
+    
     // recoverWith
 }
 
