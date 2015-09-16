@@ -8,8 +8,6 @@
 
 import Foundation
 
-import Foundation
-
 public enum Try<T> {
     case Success(T)
     case Failure(ErrorType)
