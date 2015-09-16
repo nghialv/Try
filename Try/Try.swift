@@ -8,8 +8,6 @@
 
 import Foundation
 
-import Foundation
-
 public enum Try<T> {
     case Success(T)
     case Failure(ErrorType)
@@ -95,9 +93,45 @@ public enum Try<T> {
         }
     }
     
-    // TODO:
     // recover
+    // Creates a new Try by applying a function to the error result of this Try.
+    // If this Try is completed with an success then the new Try will also contain this success.
+    // This is like map for the error.
+    public func recover(f: ErrorType -> T) -> Try<T> {
+        switch self {
+        case .Success(let value): return .Success(value)
+        case .Failure(let error): return .Success(f(error))
+        }
+    }
+    
     // recoverWith
+    // Creates a new Try by applying a function to the error result of this Try.
+    // and returns the result of the function as the new Try.
+    // If this Try is completed with an success then the new Try will also contain this success.
+    // This is like flatMap for the error.
+    public func recoverWith(f: ErrorType throws -> Try<T>) -> Try<T> {
+        switch self {
+        case .Success(let value): return .Success(value)
+        case .Failure(let error):
+            do {
+                return try f(error)
+            } catch {
+                return .Failure(error)
+            }
+        }
+    }
+    
+    // recoverWith | without throws
+    // Creates a new Try by applying a function to the error result of this Try.
+    // and returns the result of the function as the new Try.
+    // If this Try is completed with an success then the new Try will also contain this success.
+    // This is like flatMap for the error.
+    public func recoverWith(f: ErrorType -> Try<T>) -> Try<T> {
+        switch self {
+        case .Success(let value): return .Success(value)
+        case .Failure(let error): return f(error)
+        }
+    }
 }
 
 
