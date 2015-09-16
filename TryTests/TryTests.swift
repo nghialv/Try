@@ -78,4 +78,22 @@ final class TryTests: XCTestCase {
         case .Failure: XCTAssertFalse(true, "Try should not be failed")
         }
     }
+    
+    func testSuccessRecoverWith() {
+        let t = Try(try stringToInt("2")).recoverWith { _ in Try(try stringToInt("1")) }
+        
+        switch t {
+        case .Success(let value): print(value) //XCTAssertEqual(value, 2, "Try should return 2")
+        case .Failure: XCTAssertFalse(true, "Try should not be failed")
+        }
+    }
+    
+    func testFailureRecoverWith() {
+        let t = Try(try stringToInt("a")).recoverWith { _ in Try(try stringToInt("1")) }
+        
+        switch t {
+        case .Success(let value): print(value) //XCTAssertEqual(value, 1, "Try should return 1")
+        case .Failure: XCTAssertFalse(true, "Try should not be failed")
+        }
+    }
 }
